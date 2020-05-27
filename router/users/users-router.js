@@ -8,13 +8,38 @@ const { isValid } = require("./users-model");
 router.get('/', (req, res) => {
     Users.find()
         .then(user => {
-            res.json(user);
+            res.status(200).json(user);
         })
         .catch(err => {
             res.status(500).json({ message: 'Failed to get users' });
         });
 });
 
+router.get('/:id', (req, res) => {
+    const { id } = req.params;
+    Users.findById(id)
+        .then(user => {
+            const finalReturn = { ...user, potlucks: [], attending: [] }
+            Users.findUserPotlucks(id)
+                .then(potlucks => {
+                    finalReturn.potlucks = potlucks.map(item => { return item })
+                    Users.findUserAttending(id)
+                        .then(attending => {
+                            finalReturn.attending = attending.map(item => { return item })
+                            res.status(200).json(finalReturn);
+                        })
+                        .catch(err => {
+                            res.status(500).json({ err, message: 'Failed to get attending' });
+                        })
+                })
+                .catch(err => {
+                    res.status(500).json({ err, message: 'Failed to get potlucks' });
+                })
+        })
+        .catch(err => {
+            res.status(500).json({ message: 'Failed to get user' });
+        });
+});
 //CREATE USER
 router.post("/", (req, res) => {
     const credentials = req.body;
@@ -58,7 +83,7 @@ router.put('/:id', (req, res) => {
                 if (users) {
                     Users.update(changes, id)
                         .then(users => {
-                            res.json(users);
+                            res.status(201).json(changes);
                         });
                 } else {
                     res.status(404).json({ message: 'Could not find user with given id' });
@@ -76,7 +101,10 @@ router.put('/:id', (req, res) => {
 
 router.delete('/:id', (req, res) => {
     const { id } = req.params;
-
+    let returnData = '';
+    Users.findById(id)
+        .then()
+        .catch()
     Users.remove(id)
         .then(deleted => {
             if (deleted) {
