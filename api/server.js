@@ -14,8 +14,8 @@ server.use(helmet());
 server.use(cors());
 server.use(express.json());
 
-// server.use('/api/accounts', authRouter);
-// server.use('/api/users', authenticate, usersRouter);
+server.use('/api/accounts', authRouter);
+server.use('/api/users', authenticate, usersRouter);
 // server.use('/api/items', authenticate, itemsRouter);
 // server.use('/api/potlucks', authenticate, potlucksRouter);
 
