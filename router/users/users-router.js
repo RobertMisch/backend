@@ -67,6 +67,21 @@ router.post("/", (req, res) => {
     }
 });
 
+//add user as attendee to potluck
+router.post("/:id", (req, res) => {
+    const {id}=req.body.params;
+    const {potluck_id, bringing_item_id} = req.body;
+    const newAttendee= {attendee_id:id, potluck_id:potluck_id, bringing_item_id:bringing_item_id}
+
+    Users.addUserAttending(newAttendee)
+        .then(user => {
+            res.status(201).json({ data: user });
+        })
+        .catch(error => {
+            res.status(500).json({ message: error.message });
+        });
+});
+
 //UPDATE / DELETE USER
 router.put('/:id', (req, res) => {
     const { id } = req.params;
@@ -101,20 +116,24 @@ router.put('/:id', (req, res) => {
 
 router.delete('/:id', (req, res) => {
     const { id } = req.params;
-    let returnData = '';
+    let returnData = {};
     Users.findById(id)
-        .then()
-        .catch()
-    Users.remove(id)
-        .then(deleted => {
-            if (deleted) {
-                res.json({ removed: deleted });
-            } else {
-                res.status(404).json({ message: 'Could not find user with given id' });
-            }
+        .then(user => {
+            returnData=user;
+            Users.remove(id)
+                .then(deleted => {
+                    if (deleted) {
+                        res.json({ removed: returnData });
+                    } else {
+                        res.status(404).json({ message: 'Could not find user with given id' });
+                    }
+                })
+                .catch(err => {
+                    res.status(500).json({ message: 'Failed to delete user' });
+                });
         })
         .catch(err => {
-            res.status(500).json({ message: 'Failed to delete user' });
+            res.status(500).json({ message: 'Failed to get user' });
         });
 });
 

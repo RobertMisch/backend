@@ -4,13 +4,19 @@ module.exports = {
     find,
     findBy,
     findById,
-    findUserPotlucks,
-    findUserAttending,
     add,
-    addUserAttending,
     update,
     remove,
-    isValid
+    isValid,
+
+    // findUserPotlucks,
+    // addUserPotlucks,
+    // deleteUserPotlucks,
+
+    findUserAttending,
+    addUserAttending,
+    updateUserAttending,
+    removeUserAttending
 };
 
 //normal finds
@@ -28,13 +34,6 @@ function findById(id) {
     return db("users").where({ id }).first();
 }
 
-//find extra details in the relational tables
-function findUserPotlucks(id) {
-    return db("potlucks").where({ owner_id:id })
-}
-function findUserAttending(id) {
-    return db("user_attending").where({ attendee_id:id })
-}
 
 //add helpers
 async function add(user) {
@@ -46,16 +45,6 @@ async function add(user) {
         throw error;
     }
 }
-async function addUserAttending(user) {
-    try {
-        const [id] = await db("users").insert(user, "id");
-
-        return findById(id);
-    } catch (error) {
-        throw error;
-    }
-}
-
 //UD
 function update(changes, id) {
     return db("users")
@@ -71,4 +60,44 @@ function remove(id) {
 //middleware
 function isValid(user) {
     return Boolean(user.username && user.password && typeof user.password === "string");
+}
+
+//potluck ownership stuff
+// function findUserPotlucks(id) {
+//     return db("potlucks").where({ owner_id: id })
+// }
+
+// async function addUserPotlucks(potluck) {
+//     try {
+//         const [id] = await db("potlucks").insert(potluck, "id");
+
+//         return findById(id);
+//     } catch (error) {
+//         throw error;
+//     }
+// }
+// function deleteUserPotlucks(id){
+
+// }
+
+
+//attendee table stuff
+function findUserAttending(id) {
+    return db("user_attending").where({ attendee_id: id })
+}
+async function addUserAttending(attendee) {
+    try {
+        const [id] = await db("user_attending").insert(attendee, "id");
+
+        return findById(id);
+    } catch (error) {
+        throw error;
+    }
+}
+function updateUserAttending(id){
+
+}
+
+function removeUserAttending(id){
+
 }
