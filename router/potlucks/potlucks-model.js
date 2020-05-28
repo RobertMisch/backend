@@ -7,7 +7,12 @@ module.exports = {
     add,
     update,
     remove,
-    isValid
+    isValid,
+    findAttendees,
+    findPotluckItems,
+    findPotluckItemsById,
+    addItemToPotluck,
+    removeItemFromPotluck
 };
 
 //normal finds
@@ -51,4 +56,28 @@ function remove(id) {
 //middleware
 function isValid(potlucks) {
     return Boolean(potlucks.owner_id && potlucks.name && potlucks.where && potlucks.date && potlucks.category);
+}
+
+function findAttendees(id) {
+    return db("user_attending").where({ potluck_id: id })
+}
+function findPotluckItems(id) {
+    return db("potluck_items").where({potluck_id:id})
+}
+function findPotluckItemsById(id) {
+    return db("potluck_items").where({id})
+}
+async function addItemToPotluck(item) {
+    try {
+        const [id] = await db("potluck_items").insert(item, "id");
+
+        return findById(id);
+    } catch (error) {
+        throw error;
+    }
+}
+function removeItemFromPotluck(id) {
+    return db("potluck_items")
+        .where({ id })
+        .del()
 }

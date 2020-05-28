@@ -9,11 +9,12 @@ module.exports = {
     remove,
     isValid,
 
-    // findUserPotlucks,
+    findUserPotlucks,
     // addUserPotlucks,
     // deleteUserPotlucks,
 
     findUserAttending,
+    findUserAttendingById,
     addUserAttending,
     updateUserAttending,
     removeUserAttending
@@ -63,9 +64,9 @@ function isValid(user) {
 }
 
 //potluck ownership stuff
-// function findUserPotlucks(id) {
-//     return db("potlucks").where({ owner_id: id })
-// }
+function findUserPotlucks(id) {
+    return db("potlucks").where({ owner_id: id })
+}
 
 // async function addUserPotlucks(potluck) {
 //     try {
@@ -85,6 +86,9 @@ function isValid(user) {
 function findUserAttending(id) {
     return db("user_attending").where({ attendee_id: id })
 }
+function findUserAttendingById(id) {
+    return db("user_attending").where({ id }).first()
+}
 async function addUserAttending(attendee) {
     try {
         const [id] = await db("user_attending").insert(attendee, "id");
@@ -95,9 +99,13 @@ async function addUserAttending(attendee) {
     }
 }
 function updateUserAttending(id){
-
+    return db("user_attending")
+        .where({ id })
+        .update(changes)
 }
 
 function removeUserAttending(id){
-
+    return db("user_attending")
+        .where({ id })
+        .del()
 }

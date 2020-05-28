@@ -3,7 +3,7 @@ const router = require("express").Router();
 const Potlucks = require("./potlucks-model");
 const { isValid } = require("./potlucks-model");
 
-//GET Items
+//GET potlucks
 router.get('/', (req, res) => {
     Potlucks.find()
         .then(potlucks => {
@@ -17,7 +17,17 @@ router.get('/:id', (req, res) => {
     const { id } = req.params
     Potlucks.findById(id)
         .then(potlucks => {
-            res.status(200).json(potlucks);
+            const finalReturn = { ...potlucks, attendees: [], items: [] }
+            Potlucks.findAttendees(id)
+            .then(attendees=>{
+                finalReturn.attendees= attendees.map(item=>{return item})
+                Potlucks.findPotluckItems(id)
+                .then(items=>{
+                    finalReturn.items=items.map(items=>{return items})
+                    res.status(200).json(finalReturn);
+                }
+                )
+            })
         })
         .catch(err => {
             res.status(500).json({ message: 'Failed to get potlucks' });
@@ -71,7 +81,7 @@ router.delete('/:id', (req, res) => {
     let returnData = {};
     Potlucks.findById(id)
         .then(potluck => {
-            returnData=potluck;
+            returnData = potluck;
             Potlucks.remove(id)
                 .then(deleted => {
                     if (deleted) {
@@ -87,5 +97,47 @@ router.delete('/:id', (req, res) => {
         .catch(err => {
             res.status(500).json({ message: 'Failed to get potluck' });
         });
+});
+//add delete item from potluck
+router.get("/items/:id", (req, res) => {
+    const { id } = req.params;
+    Potlucks.findPotluckItems(id)
+        .then(items => {
+            res.status(200).json(items);
+        })
+        .catch(err => {
+            res.status(500).json({ err, message: 'Failed to get attending' });
+        })
+})
+router.post("/items/:id", (req, res) => {
+    const { id } = req.params;
+    const { item_id, being_brought } = req.body;
+    const newItem = { potluck_id: id, item_id: item_id, being_brought: being_brought }
+
+    Potlucks.addItemToPotluck(newItem)
+        .then(user => {
+            res.status(201).json(newItem);
+        })
+        .catch(error => {
+            res.status(500).json({ message: error.message });
+        });
+});
+router.delete("/items/:id", (req, res) => {
+    const { id } = req.params;
+
+    Potlucks.findPotluckItemsById(id)
+        .then(potluck => {
+            let potluckItem = potluck
+            Potlucks.removeItemFromPotluck(id)
+                .then(user => {
+                    res.status(201).json({ data: potluckItem });
+                })
+                .catch(error => {
+                    res.status(500).json({ message: error.message });
+                });
+        })
+        .catch(err => {
+            res.status(500).json({ err, message: 'Failed to get potluck_items' });
+        })
 });
 module.exports = router;

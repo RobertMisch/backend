@@ -37,7 +37,7 @@ router.get('/:id', (req, res) => {
                 })
         })
         .catch(err => {
-            res.status(500).json({ message: 'Failed to get user' });
+            res.status(500).json({ err, message: 'Failed to get user' });
         });
 });
 //CREATE USER
@@ -67,19 +67,48 @@ router.post("/", (req, res) => {
     }
 });
 
+//attendee crd
+router.get("/attendee/:id", (req, res) => {
+    const { id } = req.params;
+    Users.findUserAttending(id)
+        .then(attending => {
+            res.status(200).json(attending);
+        })
+        .catch(err => {
+            res.status(500).json({ err, message: 'Failed to get attending' });
+        })
+})
 //add user as attendee to potluck
-router.post("/:id", (req, res) => {
-    const {id}=req.body.params;
-    const {potluck_id, bringing_item_id} = req.body;
-    const newAttendee= {attendee_id:id, potluck_id:potluck_id, bringing_item_id:bringing_item_id}
+router.post("/attendee/:id", (req, res) => {
+    const { id } = req.params;
+    const { potluck_id, bringing_item_id } = req.body;
+    const newAttendee = { attendee_id: id, potluck_id: potluck_id, bringing_item_id: bringing_item_id }
 
     Users.addUserAttending(newAttendee)
         .then(user => {
-            res.status(201).json({ data: user });
+            res.status(201).json({ data: newAttendee });
         })
         .catch(error => {
             res.status(500).json({ message: error.message });
         });
+});
+router.delete("/attendee/:id", (req, res) => {
+    const { id } = req.params;
+    
+    Users.findUserAttendingById(id)
+    .then(attending => {
+        let Attendee= attending
+        Users.removeUserAttending(id)
+            .then(user => {
+                res.status(201).json({ data: Attendee });
+            })
+            .catch(error => {
+                res.status(500).json({ message: error.message });
+            });
+    })
+    .catch(err => {
+        res.status(500).json({ err, message: 'Failed to get attending' });
+    })
 });
 
 //UPDATE / DELETE USER
@@ -119,7 +148,7 @@ router.delete('/:id', (req, res) => {
     let returnData = {};
     Users.findById(id)
         .then(user => {
-            returnData=user;
+            returnData = user;
             Users.remove(id)
                 .then(deleted => {
                     if (deleted) {

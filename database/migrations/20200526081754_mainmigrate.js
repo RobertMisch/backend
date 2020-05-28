@@ -10,18 +10,18 @@ exports.up = function (knex) {
         .createTable("potlucks", potlucks => {
             potlucks.increments();
 
-            potlucks.
-                integer("owner_id")
+            potlucks
+                .integer("owner_id")
                 .unsigned()
                 .notNullable()
                 .references("id")
                 .inTable("users")
                 .onUpdate("CASCADE")
                 .onDelete("CASCADE");
-            potlucks.string("name", 255).unique().notNullable();
+            potlucks.string("name", 255).notNullable();
             potlucks.string("where", 255).notNullable();
             potlucks.string("date", 255).notNullable();
-            potlucks.string("category", 255).notNullable();
+            potlucks.string("category", 255).notNullable().defaultTo('test');
         })
         .createTable("items", users => {
             users.increments();
@@ -71,9 +71,9 @@ exports.up = function (knex) {
                 .integer("bringing_item_id")
                 .unsigned()
                 .references("id")
-                .inTable("potluck_items")
+                .inTable("items")
                 .onUpdate("CASCADE")
-                .onDelete("RESTRICT")
+                .onDelete("CASCADE")
                 .defaultTo(1);
         })
 };
