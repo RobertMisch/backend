@@ -89,6 +89,7 @@ Each Potluck Item has the following structure
 
 | Method | URL            | description                                                                                          |
 | ------ | -------------- | ------------------------------------------------------------------------------------------------------ |
+
 | POST   | /api/potlucks     | Creates a potluck using the information sent inside the `request body`.                                   |
 | GET    | /api/potlucks     | Returns an array of all potlucks.                                                                                |
 | GET    | /api/potlucks/:id | Returns the potluck object with the specified `id`.                                                       |
