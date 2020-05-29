@@ -34,7 +34,7 @@ function findById(id) {
 //add helpers
 async function add(item) {
     try {
-        const [id] = await db("potlucks").insert(attendee, "id");
+        const [id] = await db("potlucks").insert(item, "id");
 
         return findById(id);
     } catch (error) {

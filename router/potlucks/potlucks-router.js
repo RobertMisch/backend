@@ -56,7 +56,7 @@ router.post("/", (req, res) => {
                 res.status(201).json({ data: potluck });
             })
             .catch(error => {
-                res.status(500).json({ message: error.message });
+                res.status(500).json({error, message: error.message });
             });
     } else {
         res.status(400).json({

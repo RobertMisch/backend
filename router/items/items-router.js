@@ -62,7 +62,7 @@ router.put('/:id', (req, res) => {
             });
     } else {
         res.status(400).json({
-            message: "item should hae a name",
+            message: "item should have a name",
         });
     }
 });
