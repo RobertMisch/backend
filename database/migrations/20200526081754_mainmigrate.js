@@ -37,7 +37,7 @@ exports.up = function (knex) {
                 .references("id")
                 .inTable("potlucks")
                 .onUpdate("CASCADE")
-                .onDelete("RESTRICT");
+                .onDelete("CASCADE");
             potluck_items
                 .integer("item_id")
                 .unsigned()
@@ -45,7 +45,7 @@ exports.up = function (knex) {
                 .references("id")
                 .inTable("items")
                 .onUpdate("CASCADE")
-                .onDelete("RESTRICT");
+                .onDelete("CASCADE");
 
             potluck_items.string("being_brought_by", 255)
         })
