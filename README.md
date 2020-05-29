@@ -84,8 +84,7 @@ Each Potluck Item has the following structure
 | GET    | /api/potlucks/:id | Returns the potluck object with the specified `id`.                                                       |
 | DELETE | /api/potlucks/:id | Removes the potluck with the specified `id` and returns the deleted potluck.                                 |
 | PATCH  | /api/potlucks/:id | Updates the potluck with the specified `id` using data from the `request body`. Returns the modified potluck |
-| GET   | /api/potlucks/items/:id | gets all the items that a potluck would have
-                                  |
+| GET   | /api/potlucks/items/:id | gets all the items that a potluck would have|
 | POST   | /api/potlucks/items/:id |   adds an item to a potluck with the id in the param,    requires an item id and a 'being_brought_by'                              |
 | DELETE   | /api/potlucks/items/:id     | deletes an item from a potluck using a specifc id that all added items have                                   |
 
