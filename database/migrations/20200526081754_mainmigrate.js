@@ -21,12 +21,12 @@ exports.up = function (knex) {
             potlucks.string("name", 255).notNullable();
             potlucks.string("where", 255).notNullable();
             potlucks.string("date", 255).notNullable();
-            potlucks.string("category", 255).notNullable().defaultTo('test');
+            potlucks.string("category", 255).defaultTo('test');
         })
         .createTable("items", users => {
             users.increments();
 
-            users.string("name", 255).unique().notNullable();
+            users.string("name", 255).notNullable();
         })
         .createTable("potluck_items", potluck_items => {
             potluck_items.increments();
@@ -47,7 +47,7 @@ exports.up = function (knex) {
                 .onUpdate("CASCADE")
                 .onDelete("RESTRICT");
 
-            potluck_items.boolean("being_brought").defaultTo(false)
+            potluck_items.string("being_brought_by", 255)
         })
         .createTable("user_attending", user_attending => {
             user_attending.increments();

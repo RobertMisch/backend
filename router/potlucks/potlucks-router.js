@@ -19,15 +19,29 @@ router.get('/:id', (req, res) => {
         .then(potlucks => {
             const finalReturn = { ...potlucks, attendees: [], items: [] }
             Potlucks.findAttendees(id)
-            .then(attendees=>{
-                finalReturn.attendees= attendees.map(item=>{return item})
-                Potlucks.findPotluckItems(id)
-                .then(items=>{
-                    finalReturn.items=items.map(items=>{return items})
-                    res.status(200).json(finalReturn);
-                }
-                )
-            })
+                .then(attendees => {
+                    finalReturn.attendees = attendees.map(item => { return item })
+                    Potlucks.findPotluckItems(id)
+                        .then(items => {
+                            finalReturn.items = items.map((items) => { return items})
+                            res.status(200).json(finalReturn);
+                            // finalReturn.items = items.map((items) => {
+                            //     Potlucks.findItemById(items.item_id)
+                            //         .then((item) => {
+                            //             console.log({ ...items, item_name: item })
+                            //             const toBeReturned = { ...items, item_name: item }
+                            //             return toBeReturned
+                            //         })
+                            //         .catch(err => {
+                            //             res.status(500).json({ message: 'Failed to get items' });
+                            //         });
+                            //         res.status(200).json(finalReturn);
+                            // })
+                        })
+                        .catch(err => {
+                            res.status(500).json({ message: 'Failed to get items' });
+                        });
+                    })
         })
         .catch(err => {
             res.status(500).json({ message: 'Failed to get potlucks' });
@@ -111,8 +125,8 @@ router.get("/items/:id", (req, res) => {
 })
 router.post("/items/:id", (req, res) => {
     const { id } = req.params;
-    const { item_id, being_brought } = req.body;
-    const newItem = { potluck_id: id, item_id: item_id, being_brought: being_brought }
+    const { item_id, being_brought_by } = req.body;
+    const newItem = { potluck_id: id, item_id: item_id, being_brought_by: being_brought_by }
 
     Potlucks.addItemToPotluck(newItem)
         .then(user => {

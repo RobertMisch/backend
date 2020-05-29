@@ -11,6 +11,7 @@ module.exports = {
     findAttendees,
     findPotluckItems,
     findPotluckItemsById,
+    findItemById,
     addItemToPotluck,
     removeItemFromPotluck
 };
@@ -33,7 +34,7 @@ function findById(id) {
 //add helpers
 async function add(item) {
     try {
-        const [id] = await db("potlucks").insert(item, "id");
+        const [id] = await db("potlucks").insert(attendee, "id");
 
         return findById(id);
     } catch (error) {
@@ -61,11 +62,14 @@ function isValid(potlucks) {
 function findAttendees(id) {
     return db("user_attending").where({ potluck_id: id })
 }
+async function findItemById(id) {
+    return db("items").where({ id }).first()
+}
 function findPotluckItems(id) {
-    return db("potluck_items").where({potluck_id:id})
+    return db("potluck_items").where({ potluck_id: id })
 }
 function findPotluckItemsById(id) {
-    return db("potluck_items").where({id})
+    return db("potluck_items").where({ id })
 }
 async function addItemToPotluck(item) {
     try {
