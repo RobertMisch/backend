@@ -2,15 +2,6 @@
 
 ### Current endpoints 
 
-| Method | URL            | description                                                                                          |
-| ------ | -------------- | ------------------------------------------------------------------------------------------------------ |
-| GET    | /     | Returns an object to see if the api is up and running                                                                                |
-| POST   | /api/users     | Creates a user using the information sent inside the `request body`.                                   |
-| GET    | /api/users     | Returns an array users.                                                                                |
-| GET    | /api/users/:id | Returns the user object with the specified `id`.                                                       |
-| DELETE | /api/users/:id | Removes the user with the specified `id` and returns the deleted user.                                 |
-| PATCH  | /api/users/:id | Updates the user with the specified `id` using data from the `request body`. Returns the modified user |
-
 #### Authentication Schema
 To get a token back or to make a new user you use these endpoints
 
@@ -52,7 +43,6 @@ Each Attendee has the following structure
 
 | Method | URL            | description                                                                                          |
 | ------ | -------------- | ------------------------------------------------------------------------------------------------------ |
-
 | POST   | /api/users     | Creates a user using the information sent inside the `request body`.                                   |
 | GET    | /api/users     | Returns an array users.                                                                                |
 | GET    | /api/users/:id | Returns the user object with the specified `id`.                                                       |
@@ -89,13 +79,13 @@ Each Potluck Item has the following structure
 
 | Method | URL            | description                                                                                          |
 | ------ | -------------- | ------------------------------------------------------------------------------------------------------ |
-
 | POST   | /api/potlucks     | Creates a potluck using the information sent inside the `request body`.                                   |
 | GET    | /api/potlucks     | Returns an array of all potlucks.                                                                                |
 | GET    | /api/potlucks/:id | Returns the potluck object with the specified `id`.                                                       |
 | DELETE | /api/potlucks/:id | Removes the potluck with the specified `id` and returns the deleted potluck.                                 |
 | PATCH  | /api/potlucks/:id | Updates the potluck with the specified `id` using data from the `request body`. Returns the modified potluck |
-| GET   | /api/potlucks/items/:id | gets all the items that a potluck would have                                  |
+| GET   | /api/potlucks/items/:id | gets all the items that a potluck would have
+                                  |
 | POST   | /api/potlucks/items/:id |   adds an item to a potluck with the id in the param,    requires an item id and a 'being_brought_by'                              |
 | DELETE   | /api/potlucks/items/:id     | deletes an item from a potluck using a specifc id that all added items have                                   |
 
