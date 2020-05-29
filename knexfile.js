@@ -1,8 +1,9 @@
+require('dotenv').config();
 const pgConnection = process.env.DATABASE_URL || {
     host:'localhost',
       post:5432,
-      database: 'potlucks-3',
-      user:     'postgres',
+      database: process.env.DB_NAME,
+      user:     process.env.DB_USER,
       password: process.env.DB_PASSWORD,             
 };
 module.exports = {
